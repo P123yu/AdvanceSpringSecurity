@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.spring.security.security.model.Role.ADMIN;
+import static com.spring.security.security.model.Role.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req->req
 //                        .requestMatchers("/admin/**").authenticated()
                         .requestMatchers("/admin/**").hasRole(ADMIN.name())
+                        .requestMatchers("/student/**").hasAnyRole(ADMIN.name(),STUDENT.name(), TEACHER.name())
                 . anyRequest().permitAll()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
