@@ -1,6 +1,8 @@
 package com.spring.security.security.service.impl;
 
+import com.spring.security.security.co.RoleAndPermissionChangeCO;
 import com.spring.security.security.co.RoleChangeCO;
+import com.spring.security.security.dto.RoleAndPermissionChangeDTO;
 import com.spring.security.security.dto.RoleChangeDTO;
 import com.spring.security.security.model.Role;
 import com.spring.security.security.model.User;
@@ -30,5 +32,31 @@ public class AdminServiceImpl implements AdminService {
         return RoleChangeDTO.builder().username(user.getUsername())
                 .message("Role changed successfully").build();
     }
+
+
+    @Override
+    public RoleAndPermissionChangeDTO changeRoleAndPermission(RoleAndPermissionChangeCO roleAndPermissionChangeCO) {
+        User user = userRepository.findByUsername(roleAndPermissionChangeCO.getUsername());
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found: " + roleAndPermissionChangeCO.getUsername());
+        }
+
+        user.setRoles(roleAndPermissionChangeCO.getRoles());
+
+        // Optional: clear existing permissions before assigning new ones
+        user.getPermissions().clear();
+
+        if (roleAndPermissionChangeCO.getPermissions() != null) {
+            user.setPermissions(roleAndPermissionChangeCO.getPermissions());
+        }
+
+        user = userRepository.save(user);
+
+        return RoleAndPermissionChangeDTO.builder()
+                .username(user.getUsername())
+                .message("Role & Permissions updated successfully")
+                .build();
+    }
+
 
 }

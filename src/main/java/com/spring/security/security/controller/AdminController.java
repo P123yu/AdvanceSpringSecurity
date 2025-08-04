@@ -1,6 +1,8 @@
 package com.spring.security.security.controller;
 
+import com.spring.security.security.co.RoleAndPermissionChangeCO;
 import com.spring.security.security.co.RoleChangeCO;
+import com.spring.security.security.dto.RoleAndPermissionChangeDTO;
 import com.spring.security.security.dto.RoleChangeDTO;
 import com.spring.security.security.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,13 @@ public class AdminController {
     @PostMapping("/change-role")
     public RoleChangeDTO changeRole(@RequestBody RoleChangeCO roleChangeCO) {
         return adminService.changeRole(roleChangeCO);
+    }
+
+
+
+    @PostMapping("/change-role-and-permission")
+    public RoleAndPermissionChangeDTO changeRoleAndPermission(@RequestBody RoleAndPermissionChangeCO roleAndPermissionChangeCO) {
+        return adminService.changeRoleAndPermission(roleAndPermissionChangeCO);
     }
 
     // i want here that if sohan has two roles admin and student
