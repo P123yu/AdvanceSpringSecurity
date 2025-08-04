@@ -5,6 +5,7 @@ import com.spring.security.security.co.RegisterCO;
 import com.spring.security.security.dto.LoginResponseDTO;
 import com.spring.security.security.dto.RegisterResponseDTO;
 import com.spring.security.security.jwt.TokenGenerator;
+import com.spring.security.security.model.Role;
 import com.spring.security.security.model.User;
 import com.spring.security.security.repository.UserRepository;
 import com.spring.security.security.service.UserService;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class UserServiceImpl implements UserService {
     public RegisterResponseDTO registerUser(RegisterCO registerCO) {
         User user=User.builder().username(registerCO.getUsername())
                 .password(passwordEncoder.encode(registerCO.getPassword()))
+                .roles(Set.of(Role.ADMIN))
                 .build();
         user= userRepository.save(user);
         return RegisterResponseDTO.builder()
